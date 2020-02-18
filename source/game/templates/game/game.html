@@ -1,0 +1,74 @@
+
+{% extends 'game/profile_base.html' %}
+{% block content_block %}
+<div class="game">
+  <div class="players" >
+    {% for user in users %}
+    <div class="player" style="float: left;">
+      <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+        <div class="card-header"><p>{{ user }}</p></div>
+        <div class="card-body">
+          <h5  >City Points: </h5><input value="0" type="number" id="city-points-{{ user.pk }}" name="fname">
+          <h5 >Road Points:</h5><input value="0" type="number" id="road-points-{{ user.pk }}" name="fname">
+          <h5 >Cloister Points:</h5><input value="0" type="number" id="cloister-points-{{ user.pk }}" name="fname">
+          <h5>Current Points</h5>
+          <h5 id="running-points-{{ user.pk }}">0</h5>
+
+        </div>
+      </div>
+
+    </div>
+    </div>
+    <script>
+      function calculate_points_{{ user.pk }}() {
+        console.log("ran");
+
+        var running_points_{{ user.pk }} = document.getElementById("running-points-{{ user.pk }}").innerHTML;
+        console.log(running_points_{{ user.pk }});
+
+        var city_points_{{ user.pk }} = document.getElementById("city-points-{{ user.pk }}").value;
+        console.log(city_points_{{ user.pk }});
+
+        var road_points_{{ user.pk }} = document.getElementById("road-points-{{ user.pk }}").value;
+        console.log(road_points_{{ user.pk }});
+
+        var cloister_points_{{ user.pk }} = document.getElementById("cloister-points-{{ user.pk }}").value;
+        console.log(cloister_points_{{ user.pk }});
+
+        document.getElementById("running-points-{{ user.pk }}").innerHTML =  parseInt(cloister_points_{{ user.pk }})+
+        parseInt(road_points_{{ user.pk }})+
+        parseInt(city_points_{{ user.pk }})+
+        parseInt(running_points_{{ user.pk }});
+      }
+</script>
+    {% endfor %}
+<script>
+    function pick_winner(){
+        var players_value_pair = {};
+        {% for user in users %}
+          players_value_pair.{{ user }}=document.getElementById("running-points-{{ user.pk }}").innerHTML;
+          {% endfor %}
+          var winner = Object.keys(players_value_pair).reduce(function(a, b){ return players_value_pair[a] > players_value_pair[b] ? a : b });
+          console.log(winner);
+          window.location.href = 'http://127.0.0.1:8000/complete_game/'+winner+"/";
+        }
+
+    </script>
+
+<div class="play_button" >
+  <button type="button" onclick="{% for user in users %}
+    {% if forloop.last %} calculate_points_{{ user.pk }}()
+    {% else %}calculate_points_{{ user.pk }}(),
+    {% endif %}
+  {% endfor%}" class="btn btn-outline-primary">score</button>
+</div>
+<div class="game_complete" >
+  <button type="button" onclick="pick_winner()" class="btn btn-outline-primary">Game Complete</button>
+</div>
+<div class="log_out_button" >
+  <button type="button" onclick="window.location.href = 'http://127.0.0.1:8000/logout';" class="btn btn-outline-primary">log Out</button>
+</div>
+</div>
+
+
+{% endblock %}

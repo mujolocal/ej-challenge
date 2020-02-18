@@ -1,0 +1,30 @@
+
+{% extends 'game/profile_base.html' %}
+{% block content_block %}
+<div class="card">
+  <div class="card-header">
+    Now Log your 2nd Player in (Must be different from first)
+  </div>
+  <div class="card-body">
+    <form action="/player_2" method="post">
+      {% csrf_token %}
+      <ul style="list-style: none;>
+        <li>
+
+          <label for="your_name">User Name: </label>
+          <input id="your_name" type="text" name="name" value="{{ name }}">
+        </li>
+        <li>
+
+          <label for="your_name">Password: </label>
+          <input id="your_name" type="text" name="password_1" value="{{ password_1 }}">
+        </li>
+
+      </ul>
+  <input type="Submit" value="OK">
+      </ul>
+</form>
+  </div>
+</div>
+
+{% endblock %}
